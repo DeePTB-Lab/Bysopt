@@ -165,11 +165,9 @@ class QuantumWellOptimizationSystem:
         """Restore optimization system state from checkpoint"""
         if os.path.exists(self.checkpoint):
             try:
-                checkpoint_data = torch.load(self.checkpoint)
+                checkpoint_data = torch.load(self.checkpoint, weights_only=False)
                 self.experiment_manager.load_state_dict(checkpoint_data['experiment_manager'])
                 print(f"Checkpoint loaded from {self.checkpoint}, iteration: {self.experiment_manager.iteration}")
-
-
             except Exception as e:
                 print(f"Failed to load checkpoint: {e}")
 

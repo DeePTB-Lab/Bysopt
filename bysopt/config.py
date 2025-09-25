@@ -1,4 +1,8 @@
 import argparse
+from typing import List, Optional
+import sys
+import os
+# sys.path.append((os.path.abspath(os.path.join(os.path.dirname(__file__), '../'))))
 
 class QuantumWellConfig:
     def __init__(self):
@@ -22,7 +26,8 @@ class QuantumWellConfig:
         self.BATCH_SIZE = 3
 
 
-def parse_args():
+def parse_args(args: Optional[List[str]] = None):
+
     parser = argparse.ArgumentParser(description='Quantum Well Optimization System')
     parser.add_argument('--max_iterations', type=int, default=20, help='Maximum number of optimization iterations')
     parser.add_argument('--data_file', type=str, default='../result/quantum_well_opt.csv', help='Path to experimental data file')
@@ -37,5 +42,4 @@ def parse_args():
     parser.add_argument('--wavelength_weight', type=float, default=0.3,
                         help='Weight for wavelength in objective function')
 
-    return parser.parse_args()
-
+    return parser.parse_args(args)

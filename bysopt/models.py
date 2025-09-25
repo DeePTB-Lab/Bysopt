@@ -1,13 +1,13 @@
 import torch
 import gpytorch
 from botorch.models import SingleTaskGP
-from botorch.fit import fit_gpytorch_model
+from botorch.fit import fit_gpytorch_mll
 from botorch.acquisition import qExpectedImprovement
 from botorch.optim import optimize_acqf
 from botorch.utils import standardize
 from typing import Tuple
 from bysopt.config import QuantumWellConfig
-
+from botorch.models.transforms.input import Normalize
 
 class BayesianOptimizer:
     def __init__(self, config: QuantumWellConfig):
@@ -15,10 +15,11 @@ class BayesianOptimizer:
         self.param_bounds = torch.tensor([list(bounds) for bounds in config.PARAM_BOUNDS.values()]).T
 
     def create_surrogate_model(self, X: torch.Tensor, y: torch.Tensor) -> SingleTaskGP:
-        y_normalized = standardize(y.unsqueeze(-1)).type(torch.float32)
-        model = SingleTaskGP(X, y_normalized)
+        y_normalized = standardize(y.unsqueeze(-1)).type(torch.double)
+        X = X.type(torch.double)
+        model = SingleTaskGP(X, y_normalized,input_transform=Normalize(d=X.shape[-1]))
         mll = gpytorch.mlls.ExactMarginalLogLikelihood(model.likelihood, model)
-        fit_gpytorch_model(mll)
+        fit_gpytorch_mll(mll)
         return model
 
     def optimize_acquisition_function(self, model_wpe: SingleTaskGP,

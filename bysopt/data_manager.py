@@ -44,20 +44,3 @@ class DataManager:
         df_predicted = df_predicted[columns_order]
         df_predicted.to_csv(self.prediction_file, index=False)
         return df_predicted
-
-    def record_experiment_result(self, parameters: Dict, wpe: float, wavelength: float):
-        row_data = {
-            'WPE': wpe,
-            'Wavelength': wavelength
-        }
-
-        for param_name in self.config.PARAM_NAMES:
-            row_data[param_name] = parameters[param_name]
-
-        try:
-            df_existing = pd.read_csv(self.data_file)
-            df_combined = pd.concat([df_existing, pd.DataFrame([row_data])], ignore_index=True)
-        except (FileNotFoundError, pd.errors.EmptyDataError):
-            df_combined = pd.DataFrame([row_data])
-
-        df_combined.to_csv(self.data_file, index=False)

@@ -7,9 +7,9 @@ from bysopt.config import QuantumWellConfig
 class PhysicalConstraintProcessor:
     def __init__(self, config: QuantumWellConfig):
         self.config = config
-        self.weight_epsilon = self._create_strain_weight_vector()
+        self.weight_epsilon = self.create_strain_weight_vector()
 
-    def _create_strain_weight_vector(self) -> np.ndarray:
+    def create_strain_weight_vector(self) -> np.ndarray:
         weights = []
         for i in range(int((len(self.config.PARAM_NAMES) - 1) / 2)):
             weights.extend([self.config.EPSILON_B, self.config.EPSILON_W])
