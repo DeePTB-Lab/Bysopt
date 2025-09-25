@@ -14,7 +14,7 @@ setup(
     description="Bayesian Optimization for Quantum Well Design",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="",
+    url="https://github.com/DeePTB-Lab/Bysopt",
     packages=find_packages(),
     python_requires=">=3.8",
     install_requires=requirements,
